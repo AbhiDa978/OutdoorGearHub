@@ -1,14 +1,15 @@
 <?php
-session_start();
-include('db_connection.php');
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// // Redirect to login page if not logged in
-// if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-//     header("Location: admin_login.php");
-//     exit();
-// }
+session_start();
+
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header("Location: admin_login.php");
+    exit();
+}
+
+include('db_connection.php');
 
 // Handle add, edit, and delete actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['action'])) {
@@ -17,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['action'])) {
         $name = $_POST['name'];
         $description = $_POST['description'];
         $category = $_POST['category'];
-        $price = $_POST['price']
+        $price = $_POST['price'];
         $availability = isset($_POST['availability']) ? 1 : 0;
 
         // Handle image upload
@@ -129,7 +130,6 @@ $gear_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Outdoor Gear Hub</title>
-    <link rel="stylesheet" href="styles.css">
 <style>
 /* General Styles */
 body {
@@ -363,7 +363,7 @@ textarea:focus {
     <h1>Admin Dashboard</h1>
     <nav>
         <ul>
-            <li><a href="logout.php">Logout</a></li>
+            <li><a href="admin_logout.php">Logout</a></li>
         </ul>
     </nav>
 </header>
