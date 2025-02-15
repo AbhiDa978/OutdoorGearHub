@@ -4,6 +4,11 @@ include('db_connection.php');
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+// // Redirect to login page if not logged in
+// if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+//     header("Location: admin_login.php");
+//     exit();
+// }
 
 // Handle add, edit, and delete actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['action'])) {
@@ -12,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['action'])) {
         $name = $_POST['name'];
         $description = $_POST['description'];
         $category = $_POST['category'];
-        $price = $_POST['price'];
+        $price = $_POST['price']
         $availability = isset($_POST['availability']) ? 1 : 0;
 
         // Handle image upload
@@ -125,8 +130,7 @@ $gear_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Outdoor Gear Hub</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        <style>
+<style>
 /* General Styles */
 body {
     font-family: 'Poppins', sans-serif;
@@ -353,7 +357,6 @@ textarea:focus {
 }
 </style>
 
-    </style>
 </head>
 <body>
 <header>
@@ -410,7 +413,7 @@ textarea:focus {
     <div class="modal-content">
         <span class="modal-close" onclick="closeAddModal()">&times;</span>
         <h2>Add Gear</h2>
-        <form action="admin_dashboard.php" method="POST" enctype="multipart/form-data">
+        <form id="add-gear-form" enctype="multipart/form-data">
             <input type="hidden" name="action" value="add">
             <label for="name">Gear Name</label>
             <input type="text" name="name" required>
@@ -419,7 +422,6 @@ textarea:focus {
             <label for="category">Category</label>
             <input type="text" name="category" required>
             <label for="price">Price</label>
-            <label for="price">Price:</label>
             <input type="number" name="price" id="price" step="0.01" min="0" max="999999.99" required>
             <label for="availability">Available</label>
             <input type="checkbox" name="availability">
@@ -435,7 +437,7 @@ textarea:focus {
     <div class="modal-content">
         <span class="modal-close" onclick="closeEditModal()">&times;</span>
         <h2>Edit Gear</h2>
-        <form action="admin_dashboard.php" method="POST" enctype="multipart/form-data">
+        <form id="edit-gear-form" enctype="multipart/form-data">
             <input type="hidden" name="action" value="edit">
             <input type="hidden" name="id" id="edit-id">
             <label for="edit-name">Gear Name</label>
@@ -455,28 +457,129 @@ textarea:focus {
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    $(document).ready(function () {
+        // Add Gear
+        $("#add-gear-form").submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: "ajax_handler.php",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: "json", // Expect JSON response
+                success: function (response) {
+                    if (response.success) {
+                        alert("Gear added successfully!");
+                        $(".modal").hide(); // Close modal after success
+                        location.reload();
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("Error adding gear.");
+                }
+            });
+        });
+
+        // Edit Gear
+        $("#edit-gear-form").submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: "ajax_handler.php",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                dataType: "json", // Expect JSON response
+                success: function (response) {
+                    if (response.success) {
+                        alert("Gear updated successfully!");
+                        $(".modal").hide(); // Close modal after success
+                        location.reload();
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("Error updating gear.");
+                }
+            });
+        });
+
+        // Delete Gear (Using Delegated Event Binding)
+        $(document).on("click", ".delete-gear", function () {
+            if (confirm("Are you sure you want to delete this gear?")) {
+                var gearId = $(this).data("id");
+
+                $.ajax({
+                    url: "ajax_handler.php",
+                    type: "POST",
+                    data: { action: "delete", id: gearId },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.success) {
+                            alert("Gear deleted successfully!");
+                            location.reload();
+                        } else {
+                            alert("Error: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Error deleting gear.");
+                    }
+                });
+            }
+        });
+
+        // Open Edit Modal with Data
+        $(".edit-gear").click(function () {
+            var gear = $(this).data("gear");
+
+            $("#edit-id").val(gear.id);
+            $("#edit-name").val(gear.name);
+            $("#edit-description").val(gear.description);
+            $("#edit-category").val(gear.category);
+            $("#edit-price").val(gear.price);
+            $("#edit-availability").prop("checked", Boolean(Number(gear.availability))); // Fix checkbox issue
+            $("#edit-gear-modal").show();
+        });
+
+        // Close Modals
+        $(".modal-close").click(function () {
+            $(".modal").hide();
+        });
+    });
     function openAddModal() {
-        document.getElementById('add-gear-modal').style.display = 'block';
-    }
+    $("#add-gear-modal").show();
+}
 
-    function closeAddModal() {
-        document.getElementById('add-gear-modal').style.display = 'none';
-    }
+function closeAddModal() {
+    $("#add-gear-modal").hide();
+}
 
-    function openEditModal(gear) {
-        document.getElementById('edit-id').value = gear.id;
-        document.getElementById('edit-name').value = gear.name;
-        document.getElementById('edit-description').value = gear.description;
-        document.getElementById('edit-category').value = gear.category;
-        document.getElementById('edit-price').value = gear.price;
-        document.getElementById('edit-availability').checked = gear.availability === 1;
-        document.getElementById('edit-gear-modal').style.display = 'block';
-    }
+function openEditModal(gear) {
+    $("#edit-id").val(gear.id);
+    $("#edit-name").val(gear.name);
+    $("#edit-description").val(gear.description);
+    $("#edit-category").val(gear.category);
+    $("#edit-price").val(gear.price);
+    $("#edit-availability").prop("checked", Boolean(Number(gear.availability)));
+    $("#edit-gear-modal").show();
+}
 
-    function closeEditModal() {
-        document.getElementById('edit-gear-modal').style.display = 'none';
-    }
+function closeEditModal() {
+    $("#edit-gear-modal").hide();
+}
+
 </script>
+
 </body>
 </html>
