@@ -289,7 +289,7 @@ main {
 
 /* Cart page */
 #cartpage {
-    max-width: 800px;
+    min-width: 900px;
     margin: 20px auto;
     padding: 20px;
     background-color: #f9f9f9;

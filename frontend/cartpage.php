@@ -6,6 +6,47 @@
     <title>Your Cart - Outdoor Gear Hub</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Overlay Styles */
+        #thankyou-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .overlay-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .overlay-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .overlay-content button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .overlay-content button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
 <?php include('header.php'); ?>
@@ -24,23 +65,32 @@
     
     <?php include('footer.php'); ?>
 
+    <div id="thankyou-overlay">
+        <div class="overlay-content">
+            <h2>Thank you for your booking!</h2>
+            <p>You will be contacted shortly for delivery details. Our team is processing your order, and you will receive an update soon.</p>
+            <button id="close-overlay-button">Close</button>
+        </div>
+    </div>
+
     <script>
         const cartItemsContainer = document.getElementById('cart-items-container');
         const cartSummary = document.getElementById('cart-summary');
         const emptyCartMessage = document.getElementById('empty-cart-message');
         const totalPriceElement = document.getElementById('total-price');
-        const cartBadge = document.getElementById('cart-badge');
         const checkoutButton = document.getElementById('checkout-button');
         const clearCartButton = document.getElementById('clear-cart-button');
+        const thankyouOverlay = document.getElementById('thankyou-overlay');
+        const closeOverlayButton = document.getElementById('close-overlay-button');
 
+        // Function to update the cart display
         const updateCartDisplay = () => {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cartItemsContainer.innerHTML = '';
+            cartItemsContainer.innerHTML = '';  // Clear the container before rendering
 
             if (cart.length === 0) {
                 cartSummary.style.display = 'none';
                 emptyCartMessage.style.display = 'block';
-                cartBadge.style.display = 'none';
                 return;
             }
 
@@ -63,53 +113,39 @@
             totalPriceElement.textContent = total.toFixed(2);
             cartSummary.style.display = 'block';
             emptyCartMessage.style.display = 'none';
-            cartBadge.style.display = 'inline-block';
-            cartBadge.innerText = cart.length;
         };
 
-        // Remove item from cart
+        // Event listener to remove an item from the cart
         cartItemsContainer.addEventListener('click', (e) => {
             if (e.target.classList.contains('remove-item')) {
                 const itemId = e.target.getAttribute('data-id');
                 let cart = JSON.parse(localStorage.getItem('cart')) || [];
-                cart = cart.filter(item => item.id !== itemId);
+                cart = cart.filter(item => item.id !== itemId); // Remove item by ID
                 localStorage.setItem('cart', JSON.stringify(cart));
                 updateCartDisplay();
             }
         });
 
-        // Clear cart
+        // Event listener to clear the cart
         clearCartButton.addEventListener('click', () => {
             localStorage.removeItem('cart');
-            updateCartDisplay();
+            updateCartDisplay(); // Refresh the cart display
         });
 
-        // Checkout with popup
+        // Checkout button and popup logic
         checkoutButton.addEventListener('click', () => {
-            const popup = document.createElement('div');
-            popup.id = 'checkout-popup';
-            popup.innerHTML = `
-                <div class="popup-content">
-                    <h2>Confirm Payment</h2>
-                    <p>Are you ready to proceed with your payment?</p>
-                    <button id="pay-now-button">Pay Now</button>
-                    <button id="close-popup-button">Cancel</button>
-                </div>
-            `;
-            document.body.appendChild(popup);
-
-            document.getElementById('pay-now-button').addEventListener('click', () => {
-                alert('Booking confirmed! Thank you for your payment.');
-                popup.remove();
-                localStorage.removeItem('cart');
-                updateCartDisplay();
-            });
-
-            document.getElementById('close-popup-button').addEventListener('click', () => {
-                popup.remove();
-            });
+            // Show thank you overlay
+            thankyouOverlay.style.display = 'flex';
+            localStorage.removeItem('cart'); // Clear cart after checkout
+            updateCartDisplay(); // Update cart display to empty
         });
 
+        // Close the overlay
+        closeOverlayButton.addEventListener('click', () => {
+            thankyouOverlay.style.display = 'none';
+        });
+
+        // Initial cart display when the page loads
         updateCartDisplay();
     </script>
 </body>

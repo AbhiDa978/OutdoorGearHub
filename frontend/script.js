@@ -152,8 +152,8 @@ const renderCartItems = () => {
             localStorage.removeItem('cart');
             localStorage.removeItem('cartCount');
             cartCount = 0;
-            updateCartBadge();
             renderCartItems();
+            updateCartBadge();
         });
 
         const rentNowButton = document.createElement('button');
