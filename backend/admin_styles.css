@@ -1,0 +1,255 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+    margin: 0;
+    padding: 0;
+    color: #333;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Header */
+header {
+    background: #2D6A4F;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+header nav ul {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 22px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    transition: background 0.3s, transform 0.2s;
+}
+
+header nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* Main Section */
+main {
+    padding: 25px;
+}
+
+main section {
+    margin: 30px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 6px solid #4CAF50;
+}
+
+main section:nth-child(odd) {
+    border-left-color: #FF9800;
+    background: #fffdf7;
+}
+
+main section:nth-child(even) {
+    border-left-color: #03A9F4;
+    background: #f1faff;
+}
+
+main section:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+main section h2 {
+    margin-top: 0;
+    color: #4CAF50;
+    text-align: center;
+    font-size: 1.9rem;
+    border-bottom: 2px solid #81c784;
+    display: inline-block;
+    padding-bottom: 6px;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.95rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+table th {
+    background: linear-gradient(to right, #4CAF50, #66bb6a);
+    color: white;
+    padding: 12px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+table td {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+    transition: 0.2s;
+}
+
+table img {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Buttons */
+button,
+a.button {
+    display: inline-block;
+    padding: 10px 22px;
+    margin: 10px 5px 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #4CAF50, #66bb6a);
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    text-decoration: none;
+    text-align: center;
+}
+
+button.secondary {
+    background: linear-gradient(135deg, #03A9F4, #4fc3f7);
+}
+
+button.danger {
+    background: linear-gradient(135deg, #e74c3c, #ff6f61);
+}
+
+button:hover,
+a.button:hover {
+    background: linear-gradient(135deg, #45a049, #5caf6d);
+    transform: scale(1.05);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: white;
+    margin: 5% auto;
+    padding: 30px;
+    border-radius: 18px;
+    width: 80%;
+    max-width: 550px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.4s ease;
+    border-left: 6px solid #4CAF50;
+}
+
+.modal-close {
+    background: #e74c3c;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 16px;
+    cursor: pointer;
+    float: right;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+}
+
+.modal-close:hover {
+    background: #c0392b;
+}
+
+/* Form Styles */
+label {
+    font-weight: bold;
+    color: #444;
+    margin-top: 12px;
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-20%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
