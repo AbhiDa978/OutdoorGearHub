@@ -67,7 +67,7 @@ addToCartButtons.forEach(button => {
 
 // Profile hover effect
 const profileIcon = document.getElementById('profile-icon');
-const userIdDiv = document.getElementById('user-id');
+const userIdDiv = document.getElementById('user-name');
 
 if (profileIcon && userIdDiv) {
     profileIcon.addEventListener('mouseover', () => {
